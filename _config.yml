@@ -1,3 +1,16 @@
+title: Classifying Recipe Popularity and Rating with Imbalanced Data
+author: Weijie Zhang
+  name: Wzhang3912
+  email: wez042@ucsd.edu
+
+# The `>` after `description:` means to ignore line-breaks until next key.
+# If you want to omit the line-break after the end of text, use `>-` instead.
+description: >
+  Classifying recipes' popularity level and rating with imbalanced data 
+  using RandomForest and BalancedRandomForest. 
+
+# Build settings
+
 theme: minima
-plugins:
-  - jekyll-remote-theme
+
+remote_theme: jekyll/minima
