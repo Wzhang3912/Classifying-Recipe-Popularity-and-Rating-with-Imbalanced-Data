@@ -10,7 +10,9 @@ description: >
   using RandomForest and BalancedRandomForest. 
 
 # Build settings
-
 theme: minima
-
+plugins:
+  - jekyll-remote-theme
+  
 remote_theme: jekyll/minima
+  
