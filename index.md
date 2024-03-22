@@ -670,6 +670,10 @@ To evaluate fairness, we will compare the **precision** acorss two distinct grou
 
 Setup:
 
+**Group 1**: Recipes with the `vegetarian` tag
+
+**Group 2**: Recipes without the `vegetarian` tag
+
 **Null Hypothesis**: Our model is fair. Our classifier's precision is the same for recipes with and without `vegetarian` tag, and any differences are due to random chance.
 
 **Alternative Hypothesis**: Our model is not fair. Our classifier's precision is higher for recipes with `vegetarian` tag than those without, and any observed differences can not be explained by random chance alone.
