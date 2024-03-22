@@ -73,8 +73,6 @@ Through a rigorous analysis of these datasets, we will explore univariate and bi
 
 ## Data Clearning and EDA
 
-[]
-
 ### Data Cleaning 
 
 We will perform the following data cleaning steps to combine and transform our dataset into tidy format, before diving into analysis. 
