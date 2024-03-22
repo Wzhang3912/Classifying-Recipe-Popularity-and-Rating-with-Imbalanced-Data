@@ -3,5 +3,4 @@ theme: minima
 
 plugins:
 - jekyll-theme
-- jekyll-titles-from-headings
   
