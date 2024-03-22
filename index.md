@@ -9,6 +9,18 @@ This data science project aims to explore some of the characteristics of popular
 
 ---
 
+# Table of Contents
+1. [Introduction](#Introduction)
+2. [Data Clearning and EDA](#data-clearning-and-eda)
+3. [Assessment of Missingness](#assessment-of-missingness)
+4. [Hypothesis Testing](#hypothesis-testing)
+5. [Framing a Prediction Problem](#framing-a-prediction-problem)
+6. [Baseline Model: A Simple Approach](#baseline-model-a-simple-approach)
+7. [Final Model: Balanced Random Forest & Binary Classification](#final-model-balanced-random-forest--binary-classification)
+8. [Fairness Analysis](#fairness-analysis)
+
+---
+
 ## Introduction
 
 Nowadays, cooking and sharing recipes online has become widely popular and a significant part of many people’s lives. With the convenience of online recipe platforms like food.com, millions of users benefit from having access to a vast collection of recipes in a variety of culinary. Among all the recipe options available, however, some recipes stand out as both particularly popular and highly rated. 
@@ -56,6 +68,32 @@ Note: we define the threshold for high and low review counts as **10** reviews c
 <br>
 
 Through a rigorous analysis of these datasets, we will explore univariate and bivariate relationships between key variables, investigate missing values in the dataset, conduct hypothesis testing to answer the question of interest, build and evaluate a classifier model, and ultimately conduct fairness analysis for the final model. This project will provide valuable insights into understanding the key characteristics of certain recipes that stand out as exceptional and loved by many. 
+
+---
+
+## Data Clearning and EDA
+
+### Data Cleaning 
+
+We will perform the following data cleaning steps to combine and transform our dataset into tidy format, before diving into analysis. 
+
+1. **Convert data type**: We converted the `steps`, `tags`, and `ingredients` columns from the string data type to the list data type. This will help us in accessing each individual element. We also converted the `submitted` column to datatime format. 
+
+2. **Expand the `Nutrition` column**: We expanded the `nutrition` column in the Dataframe such that nutritional information like `calories`, `total fat`, `sugar`, etc is in their individual columns. This allows us to easily access and analyze each quantitative column separately. 
+
+3. **Merge the two datasets into one**: We merged the review dataset into the recipes dataset such that each unique recipe has an average rating and a review list where each element represents a review comment given by a user. We added a new column called `n_review` that counts the number of reviews a recipe has. We will use this information to represent the popularity of the recipe. 
+
+<br>
+
+After data cleaning, we have the following Dataframe comes in handy for analysis: 
+
+| name |   id | minutes | contributor_id | submitted  | tags  | n_steps | steps  | description  | ingredients | n_ingredients | calories | total_fat | sugar | sodium | protein | saturated_fat | carbohydrates | rating | n_review | reviews   |
+|-----------------------------|---------|---------|----------------|------------|------------------------------------------------------------------------------------------------------------------------------------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|--------------|----------|-----------|-------|--------|---------|---------------|---------------|--------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1 brownies in the world    best ever |  333281 |      40 |         985201 | 2008-10-27 | ['60-minutes-or-less', 'time-to-make', 'course', 'main-ingredient']                                                                                 |      10 | ['heat the oven to 350f and arrange the rack in the middle ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | these are the most; chocolatey, moist, rich, dense, fudgy, delicious brownies ...                                                                                                                                                       | ['bittersweet chocolate', 'unsalted butter', 'eggs', 'granulated sugar']                                                                       |            9 |    138.4 |      10.0 |  50.0 |    3.0 |     3.0 |           19.0 |             6.0 |    4.0 |      1.0 | ['These were pretty good, but took forever to bake ...                                                                                                                                                                                                                                                                            |
+| 1 in canada chocolate chip cookies   |  453467 |      45 |        1848091 | 2011-04-11 | ['60-minutes-or-less', 'time-to-make', 'cuisine', 'preparation', 'north-american' ... |      12 | ['pre-heat oven the 350 degrees f, in a mixing bowl ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | this is the recipe that we use at my school cafeteria for chocolate chip cookies ...                                                                                                                                                       | ['white sugar', 'brown sugar', 'salt', 'margarine', 'eggs']                                                                                      |           11 |    595.1 |      46.0 | 211.0 |   22.0 |    13.0 |           51.0 |            26.0 |    5.0 |      1.0 | ['Originally I was gonna cut the recipe in half (just the 2 of us here) ...                                                                                                                                                                                                                                                     |
+| 412 broccoli casserole        |  306168 |      40 |          50969 | 2008-05-30 | ['60-minutes-or-less', 'time-to-make', 'course', 'main-ingredient']                                                                                 |       6 | ['preheat oven to 350 degrees, spray a 2 quart baking dish with cooking spray ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | since there are already 411 recipes for broccoli casserole ...                                                                                                                                                         | ['frozen broccoli cuts', 'cream of chicken soup', 'sharp cheddar cheese']                                                                       |            9 |    194.8 |      20.0 |   6.0 |   32.0 |    22.0 |           36.0 |             3.0 |    5.0 |      4.0 | ['This was one of the best broccoli casseroles that I have ever made ...                                                                                                                                                                                                                                                         |
+| millionaire pound cake       |  286009 |     120 |         461724 | 2008-02-12 | ['time-to-make', 'course', 'cuisine', 'preparation', 'occasion', 'north-american']                                                                   |       7 | ['freheat the oven to 300 degrees, grease a 10-inch tube pan with butter ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | why a millionaire pound cake?  because it's super rich ...                                                                                                                                                                              | ['butter', 'sugar', 'eggs', 'all-purpose flour', 'whole milk']                                                                                 |            7 |    878.3 |      63.0 | 326.0 |   13.0 |    20.0 |          123.0 |            39.0 |    5.0 |      1.0 | ['don't let the calories and fat grams scare you off ...                                                                                                                                                                                                                                                                           |
+| 2000 meatloaf                |  475785 |      90 |        2202916 | 2012-03-06 | ['time-to-make', 'course', 'main-ingredient', 'preparation', 'main-dish' ... |      17 | ['pan fry bacon , and set aside on a paper towel to absorb excess grease ...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | ready, set, cook! special edition contest entry: ...                                                                                                                                                                                     | ['meatloaf mixture', 'unsmoked bacon', 'goat cheese', 'unsalted butter']                                                                        |           13 |    267.0 |      30.0 |  12.0 |   12.0 |    29.0 |           48.0 |             2.0 |    5.0 |      2.0 | ['Delicious!!!!! -- the goat cheese made the difference ...                                                                                                                                                                                                                                                                       |
 
 ---
 
@@ -181,7 +219,6 @@ Let's look at the distribution of `sugar`, conditional on the missingness of `de
 Based on the plot above, the orange line represents the distribution of sugar when `description` is not missing, while the blue line represents the distribution of sugar when `description` is missing. We can see that these two distributions of sugar, conditional on the missingness of `description`, looks quite difference. To quantify this difference, we decide to use Kolmogorov-Smirnov (K-S) statistic instead of the absolute difference of means. Therefore, we will use **K-S statistics** as our test statistics for the permutation test.
 
 
-
 We shuffle the missingness of description 1000 times and get 1000 simulated K-S test statistics of `sugar` column during the permutation test. The permutation result is shown as below. 
 
 <iframe src="figures/miss_perm_1.html" width=800 height=600 frameBorder=0></iframe>
@@ -252,8 +289,8 @@ We created a new column called `is_popular` which is true if the recipe has reiv
 
 This is a sample of the dataframe that we are going to perform permutation test on. 
 
-|      |   sugar | is_popular   |
-|------|--------|-------------|
+|       |   sugar  | is_popular  |
+|------ |-------- |------------- |
 |  1092 |      36 | False        |
 | 44285 |       4 | False        |
 | 60708 |      18 | False        |
@@ -298,7 +335,7 @@ The prediction problem we are addressing is a **multi-class classification** pro
 
 <br>
 
-To generate features for our classification model, the variables we will be using are all other columns except `rating` and `n_review` since these two variables are used to create the class categories. 
+To generate features for our classification model, the variables we will be using are all other columns except `rating` and `n_review` since these two variables are used to create the class categories. These are the features we are available at the time of prediction for classifying recipes based on popularity and average rating. 
 
 The key metrics we will be using for evaluating our classifier model performance are **accuracy, precision, recall, and f1-score**:
 
@@ -377,7 +414,7 @@ We choose to build features from the above columns as we believe these features 
 
 For Baseline Model, we decide to use the Random Forest model for our classification problem. 
 
-The main idea of Random Forest algorithm is to Fit n number of decision trees by using bagging and a random subset of features at each split. Predict by taking a vote from those n decision trees. It is the idea of Ensemble Learning.
+The main idea of Random Forest algorithm is to Fit *n* number of decision trees by using bagging and a random subset of features at each split. Predict by taking a vote from those *n* decision trees. It is the idea of Ensemble Learning.
 
 <br>
 
