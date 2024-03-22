@@ -9,7 +9,7 @@ This data science project aims to explore some of the characteristics of popular
 
 ---
 
-# Table of Contents
+## Table of Contents
 1. [Introduction](#Introduction)
 2. [Data Clearning and EDA](#data-clearning-and-eda)
 3. [Assessment of Missingness](#assessment-of-missingness)
@@ -72,6 +72,8 @@ Through a rigorous analysis of these datasets, we will explore univariate and bi
 ---
 
 ## Data Clearning and EDA
+
+[]
 
 ### Data Cleaning 
 
@@ -685,3 +687,6 @@ We then shuffle the `has_tags_vegetarian` 1000 times and get 1000 simulated diff
 <iframe src="figures/fair.html" width=800 height=600 frameBorder=0></iframe>
 
 From the graph above, we can see that the observed difference in precision falls below the significance level of 0.05, suggesting that the observed statistics in our sample are likely by random chance alone. The p-value we obtained from performing our permutation testing is approximately 0.403, which is greater than our significance level of 0.05. Therefore, we **fail to feject our null hypothesis** that the precision of our classifier is likely around the same for recipes with and without `vegetarian` tag, and any observed differences are due to random chance. Our model **achieves precision parity** across groups with and without `vegetarian`tag. 
+
+[Back to the Top](#table-of-contents)
+
