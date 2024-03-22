@@ -1,0 +1,13 @@
+author: Weijie Zhang
+  email: wez042@ucsd.edu
+
+description: >
+  Classifying recipes' popularity level and rating with imbalanced data 
+  using RandomForest and BalancedRandomForest. 
+
+# Build settings
+theme: minima
+
+plugins:
+- jekyll-theme
+  
