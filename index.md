@@ -15,8 +15,6 @@ Nowadays, cooking and sharing recipes online has become widely popular and a sig
 
 In this project, we dive into an extensive collection of food recipe data sourced from food.com. The first dataset we are going to use contains food recipes from 2008 to 2018 on food.com, with detailed information about a recipe such as ingredients, preparation times, nutritional values, etc. This dataset contains 83782 observations, meaning that there are 83782 unique recipes in total in our data. The second dataset contains information about users’ review comments and ratings submitted for the recipes in the first dataset. This dataset contains 731927 number of reviews in total submitted by users. Some recipes have lots of reviews while others might have fewer. 
 
-<br>
-
 Let’s take a closer look at the information we have. Below is the description of some of the relevant columns in the first dataset:
 
 
@@ -31,6 +29,7 @@ Let’s take a closer look at the information we have. Below is the description 
 |   `description` |   Recipe description    |
 |   `ingredients` |      List of ingredients for recipe  |
 
+<br>
 
 Let’s take a look at the second dataset:
 
@@ -40,7 +39,6 @@ Let’s take a look at the second dataset:
 |   `rating`       |       Rating given by the user         |
 |   `review`       |       Review comment given by the user |
 
-<br>
 <br>
 
 By combining these two comprehensive datasets, we aim to answer the following research questions throughout the project: **What are some of the characteristics of the recipe that are both popular and highly rated? What category does a recipe fall into based on its predicted popularity level and average rating score?**
@@ -119,38 +117,16 @@ In making this visualization, we only included 99% of the data value for the `ca
 So far, we only looked at the overall distribution of one variable and the bivariate distribution of two variables. For a better understanding of our data, we construct the following pivot table that shows the aggregated distribution of quantitative variables by mean, conditional on the number of ingredients. As we examine each column of the pivot table from top to bottom, we can observe a consistently increasing trend in various quantitative variables such as `calories`, `carbohydrates`, `minutes`, `n_steps`, `protein`, `saturated_fat`, `sodium`, and `total_fat`, as the number of ingredients increases in food recipes. This suggests that `n_ingredients` might have a positive correlation with these quantitative variables. 
 
 
-The pivot table is shown below (number is rounded to 3 decimal places)
+The pivot table is shown below (number is rounded to 3 decimal places and only showin the first and last 5 line )
 
-|   n_ingredients |   calories |   carbohydrates |   minutes |   n_steps |   protein |   saturated_fat |   sodium |   sugar |   total_fat |
-|----------------|-----------|----------------|----------|----------|----------|----------------|---------|--------|------------|
+|   n_ingredients |   calories |   carbohydrates |   minutes |   n_steps |   protein |   saturated_fat |   sodium |    sugar |   total_fat |
+|----------------|-----------|----------------|----------|----------|----------|----------------|---------|---------|------------|
 |               1 |    288.77  |          10.2   |    47.6   |     7.3   |    10.8   |          25     |   12.9   | 100.1   |      21.8   |
 |               2 |    238.312 |           8.728 |    56.131 |     5.711 |    13.18  |          18.211 |    7.699 |  62.322 |      15.27  |
 |               3 |    233.924 |           8.413 |    42.754 |     5.485 |    13.873 |          19.791 |   10.844 |  55.622 |      15.406 |
 |               4 |    263.534 |           9.084 |    40.107 |     6.135 |    16.943 |          24.627 |   12.858 |  60.599 |      18.164 |
 |               5 |    282.587 |           9.288 |    49.087 |     7.104 |    19.914 |          26.891 |   15.712 |  54.497 |      20.726 |
-|               6 |    300.474 |           9.7   |    51.857 |     7.716 |    22.256 |          28.382 |   17.644 |  52.118 |      22.189 |
-|               7 |    326.27  |           9.87  |    56.538 |     8.413 |    26.021 |          31.473 |   19.369 |  46.82  |      25.221 |
-|               8 |    339.984 |          10.234 |    58.947 |     9.214 |    28.029 |          32.541 |   20.882 |  45.587 |      26.283 |
-|               9 |    353.065 |          10.757 |    63.083 |     9.853 |    30.069 |          32.736 |   21.893 |  44.457 |      26.781 |
-|              10 |    366.854 |          10.979 |    67.319 |    10.709 |    32.143 |          34.049 |   22.93  |  45.52  |      27.997 |
-|              11 |    386.087 |          11.631 |    69.016 |    11.21  |    34.144 |          35.42  |   24.741 |  47.409 |      29.362 |
-|              12 |    402.617 |          12.329 |    72.786 |    11.912 |    35.873 |          36.136 |   25.677 |  49.844 |      30.143 |
-|              13 |    419.473 |          12.785 |    75.468 |    12.585 |    37.439 |          37.407 |   26.52  |  51.117 |      31.519 |
-|              14 |    437.62  |          13.139 |    81.278 |    13.326 |    39.786 |          39.264 |   28.078 |  51.233 |      33.134 |
-|              15 |    461.443 |          13.811 |    85.581 |    14.249 |    43.113 |          40.383 |   30.858 |  49.922 |      34.574 |
-|              16 |    486.545 |          14.736 |    82.214 |    14.924 |    45.352 |          42.702 |   33.729 |  51.809 |      36.217 |
-|              17 |    493.79  |          14.64  |    92.491 |    15.594 |    46.517 |          43.666 |   33.938 |  54.435 |      37.395 |
-|              18 |    532.985 |          15.415 |    98.909 |    16.39  |    50.407 |          47.228 |   36.299 |  54.46  |      40.908 |
-|              19 |    526.863 |          15.781 |    97.143 |    16.714 |    49.113 |          44.232 |   37.453 |  53.226 |      39.722 |
-|              20 |    549.916 |          15.232 |    99.352 |    17.654 |    52.645 |          47.735 |   40.738 |  47.756 |      43.358 |
-|              21 |    554.031 |          15.832 |   116.699 |    17.878 |    54.418 |          49.806 |   42.719 |  52.015 |      42.76  |
-|              22 |    586.774 |          17.954 |   131.708 |    19.685 |    56.208 |          49.023 |   41.831 |  64.338 |      43.069 |
-|              23 |    582.013 |          17.024 |   141.25  |    19.321 |    53.048 |          50.679 |   52.095 |  63.988 |      45.619 |
-|              24 |    628.248 |          17.029 |   130.754 |    19.884 |    63.217 |          46.072 |   44.623 |  49.623 |      49.681 |
-|              25 |    669.144 |          18.969 |   109.781 |    21.594 |    66.781 |          60.188 |   63.969 |  66.594 |      52     |
-|              26 |    531.532 |          17     |   104.12  |    18.36  |    47.28  |          44.72  |   42.96  |  52.12  |      39.48  |
-|              27 |    724.389 |          20.333 |   153.167 |    21.167 |    67.667 |          75.556 |   44.111 |  64.389 |      58     |
-|              28 |    537.787 |          16.133 |   111     |    28.333 |    61.467 |          38.467 |   52.733 |  54.533 |      37.2   |
+|   ... |   ... |   ... |   ... |   ... |   ... |   ... |   ... |    ... |   ... |
 |              29 |    886.3   |          34     |    86.222 |    21.222 |    78     |          72.333 |   59.444 | 141.778 |      60     |
 |              30 |    631.656 |          17.333 |   116.667 |    20     |    55.222 |          62.222 |   51     |  41.222 |      53.222 |
 |              31 |    502.05  |          14.667 |   197.5   |    22.333 |    47.667 |          45     |   46.5   |  44.667 |      39.833 |
@@ -220,7 +196,7 @@ Thus, we conclude that **the missingness of `descrpition` likely depends on the 
 
 We hypothesize that the missingness of `description` column does not depend on the `calorie` column, meaning that the distribution of calorie when `description` is missing and the distribution of calorie when `description` is not missing are alike, any difference is due to random chance. 
 
-
+<br>
 
 Set up:
 
@@ -257,6 +233,8 @@ Thus, we conclude that **the missingness of `descrpition` likely depends on the 
 The question we are going to explore and reasearch in this section is the following: **Do popular recipes (those with high review count) have a lower sugar level compared to less popular ones (those with low review count)** 
 
 Recall that we define high review count threshold as having more than **10** reviews. We will conduct a permutationt test to see if the distribution of sugar level for popular recipes and the distribution of sugar level for not popular recipes are similar. 
+
+<br>
 
 Set up:
 
@@ -348,6 +326,7 @@ The key metrics we will be using for evaluating our classifier model performance
 
 - **F1-score**, being the harmonic mean of precision and recall, provides a balanced summary of the model’s predictive power, considering both predicted positive and actual positive. 
 
+---
 
 ## Baseline Model: A Simple Approach
 
@@ -355,6 +334,8 @@ We split our data to training and testing set by stratifing using the class labe
 
     X_train, X_test, y_train, y_test = train_test_split(recipe.drop(['class', 'rating', 'n_review'], axis=1), 
                                                         recipe['class'], test_size=0.2, stratify=recipe['class'])
+
+---
 
 ### Feature Engineering
 
@@ -505,8 +486,6 @@ As usual, we will us the same training and testing data from baseline mode.
  - Vectorize the steps text column using TF-IDF and the vocabulary from previous step
  - For each recipe, extract the top 5 highest TF-IDF values as the features 
 
-<br>
-
 We believe that incorporating `description` and `steps` feature can improve our model's ability to identify recipes with high review counts since we built a vocabulary from those recipes and use TF-IDF to extract important text information. While there is a potential risk of data leakage since we use the class label to build feature, our approach to using the class label is indirect and we only use the training data to build vocabulary. We believe it is appropraite to use these text feature in our final model. 
 
 <br>
@@ -596,6 +575,8 @@ After fitting our training data into the final model, we evalute our model using
 
 As seen in the confusion matrix, our final model has correctly classified a considerable amount of minority class label, class 3 and 4, which is overall an improvement to the baseline model. 
 
+<br>
+
 Let's look at the precision, recall, and f1-score of our final model for predicting unseen data.
 
 |            | precision | recall | f1-score | support |
@@ -630,7 +611,7 @@ Below, we present the top 10 most useful sentiment words for feature engineering
     9        would
     10    wonderful
 
-<br>
+--- 
 
 Finally, we fit our final model using all availbale data and ship to production for fairness analysis. 
 
