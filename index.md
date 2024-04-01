@@ -11,7 +11,7 @@ This data science project aims to explore some of the characteristics of popular
 
 ## Table of Contents
 1. [Introduction](#Introduction)
-2. [Data Clearning and EDA](#data-clearning-and-eda)
+2. [Data Cleaning and EDA](#data-cleaning-and-eda)
 3. [Assessment of Missingness](#assessment-of-missingness)
 4. [Hypothesis Testing](#hypothesis-testing)
 5. [Framing a Prediction Problem](#framing-a-prediction-problem)
@@ -71,7 +71,7 @@ Through a rigorous analysis of these datasets, we will explore univariate and bi
 
 ---
 
-## Data Clearning and EDA
+## Data Cleaning and EDA
 
 ### Data Cleaning 
 
@@ -146,7 +146,7 @@ In crafting this box plot, we only incorporated 95% of the data values from the 
 (This is a scatter plot featuring the relationship between calorie percent daily value and the number of ingredients in food recipes in the dataset.)
 
 
-In making this visualization, we only included 99% of the data value for the `calories` column to exclude extreme values, grouped ratings into bins, and introduced random noise to the `n_ingredients` column, which represents a discrete variable, for better visualization. From examining the scatter plot, we see that there exists a **week positive correlation between the calorie daily level and the number of ingredients in recipes**. This finding aligns with our expectation that using a variety of ingredients in a recipe would likely result in higher calorie content in food.
+In making this visualization, we only included 99% of the data value for the `calories` column to exclude extreme values, grouped ratings into bins and introduced random noise to the `n_ingredients` column, which represents a discrete variable, for better visualization. From examining the scatter plot, we see that there exists a **week positive correlation between the calorie daily level and the number of ingredients in recipes**. This finding aligns with our expectation that using a variety of ingredients in a recipe would likely result in higher calorie content in food.
 
 ---
 
@@ -155,7 +155,7 @@ In making this visualization, we only included 99% of the data value for the `ca
 So far, we only looked at the overall distribution of one variable and the bivariate distribution of two variables. For a better understanding of our data, we construct the following pivot table that shows the aggregated distribution of quantitative variables by mean, conditional on the number of ingredients. As we examine each column of the pivot table from top to bottom, we can observe a consistently increasing trend in various quantitative variables such as `calories`, `carbohydrates`, `minutes`, `n_steps`, `protein`, `saturated_fat`, `sodium`, and `total_fat`, as the number of ingredients increases in food recipes. This suggests that `n_ingredients` might have a positive correlation with these quantitative variables. 
 
 
-The pivot table is shown below (number is rounded to 3 decimal places and only showin the first and last 5 line )
+The pivot table is shown below.
 
 |   n_ingredients |   calories |   carbohydrates |   minutes |   n_steps |   protein |   saturated_fat |   sodium |    sugar |   total_fat |
 |----------------|-----------|----------------|----------|----------|----------|----------------|---------|---------|------------|
@@ -186,7 +186,7 @@ As we can see from the line plots above which illustrates the relationship betwe
 
 ### Not Missing At Random (NMAR) Analysis 
 
-We believe that the missing values in the `rating` column are not Not Missing at Random (**NMAR**), meaning that the chance of a value being missing **depends on the actual missing values themselves.** Updon browersing from the food.com website, we found that there are certain reviews given by users without ratings in the comment section of a recipe (showing in the image below). This is the case in which users opt to provide a review comment, without giving a rating score to the recipe. Therefore, during the data generation process, this result in certain recipes having missing rating score values.
+We believe that the missing values in the `rating` column are Not Missing at Random (**NMAR**), meaning that the chance of a value being missing **depends on the actual missing values themselves.** Upon browsing the food.com website, we found that there are certain reviews given by users without ratings in the comment section of a recipe (shown in the image below). This is the case in which users opt to provide a review comment, without giving a rating score to the recipe. Therefore, during the data generation process, this result in certain recipes having missing rating score values.
 
 <img src="figures/Image_1.png" alt="NMAR example">
 
@@ -194,9 +194,9 @@ We believe that the missing values in the `rating` column are not Not Missing at
 
 ### Missingness Dependency Analysis
 
-Besides the `rating` column, we also found missing values in `description` column. We hypothesize that the missingness of `description` is **Missing at Random (MAR)**, meaning that the chance of a value being missing **depends on some other columns**. We will investigate the missing dependency of `description` using permutation test. 
+Besides the `rating` column, we also found missing values in the `description` column. We hypothesize that the missingness of `description` is **Missing at Random (MAR)**, meaning that the chance of a value being missing **depends on some other columns**. We will investigate the missing dependency of `description` using a permutation test. 
 
-We hypothesize that the missingness of `description` column depends on the `sugar` column, meaning that there is some systemic difference between the distribution of sugar for those recipes missing the description and those that do not. 
+We hypothesize that the missingness of the `description` column depends on the `sugar` column, meaning that there is some systemic difference between the distribution of sugar for those recipes missing the description and those that do not. 
 
 <br>
 
@@ -212,32 +212,32 @@ Set up:
 
 
 
-Let's look at the distribution of `sugar`, conditional on the missingness of `description` column. 
+Let's look at the distribution of `sugar`, conditional on the missingness of the `description` column. 
 
 <iframe src="figures/miss_dist_1.html" width=800 height=600 frameBorder=0></iframe>
 
-Based on the plot above, the orange line represents the distribution of sugar when `description` is not missing, while the blue line represents the distribution of sugar when `description` is missing. We can see that these two distributions of sugar, conditional on the missingness of `description`, looks quite difference. To quantify this difference, we decide to use Kolmogorov-Smirnov (K-S) statistic instead of the absolute difference of means. Therefore, we will use **K-S statistics** as our test statistics for the permutation test.
+Based on the plot above, the orange line represents the distribution of sugar when `description` is not missing, while the blue line represents the distribution of sugar when `description` is missing. We can see that these two distributions of sugar, conditional on the missingness of `description`, look quite different. To quantify this difference, we decide to use Kolmogorov-Smirnov (K-S) statistic instead of the absolute difference of means. Therefore, we will use **K-S statistics** as our test statistics for the permutation test.
 
 
-We shuffle the missingness of description 1000 times and get 1000 simulated K-S test statistics of `sugar` column during the permutation test. The permutation result is shown as below. 
+We shuffle the missingness of the `description` 1000 times and get 1000 simulated K-S test statistics of the `sugar` column during the permutation test. The permutation result is shown as below. 
 
 <iframe src="figures/miss_perm_1.html" width=800 height=600 frameBorder=0></iframe>
 
-From the plot above and result of the permutation test, the 0.05% significance level of the simulated statistics is 0.16 and our observed test statistics 0.18, which is greater that the values of the significance level. The p-value is 0.019, which is less than the significance level of 0.05. So we **reject the null hypothesis.**
+From the plot above and the result of the permutation test, the 0.05% significance level of the simulated statistics is 0.16, and our observed test statistics is 0.18, which is greater than the values of the significance level. The p-value is 0.019, which is less than the significance level of 0.05. So we **reject the null hypothesis.**
 
-Thus, we conclude that **the missingness of `descrpition` likely depends on the `sugar` column.**
+Thus, we conclude that **the missingness of `description` likely depends on the `sugar` column.**
 
 
 ---
 
 
-We hypothesize that the missingness of `description` column does not depend on the `calorie` column, meaning that the distribution of calorie when `description` is missing and the distribution of calorie when `description` is not missing are alike, any difference is due to random chance. 
+We hypothesize that the missingness of the `description` column does not depend on the `calorie` column, meaning that the distribution of calories when `description` is missing and the distribution of calories when `description` is not missing are alike, any difference is due to random chance. 
 
 <br>
 
 Set up:
 
-**Does the missingness of `description` depend on `minutes` column?**
+**Does the missingness of `description` depend on the `minutes` column?**
 
 **Null Hypothesis**: the missingness of `description` does not depend on `minutes`. 
 
@@ -247,47 +247,47 @@ Set up:
 
 
 
-Let's look at the distribution of `minutes`, conditional on the missingness of `description` column. 
+Let's look at the distribution of `minutes`, conditional on the missingness of the `description` column. 
 
 <iframe src="figures/miss_dist_2.html" width=800 height=600 frameBorder=0></iframe>
 
-Based on the plot above, the orange line illustrates the distribution of minutes when `description` is not missing, while the blue line illustrates the distribution of minutes when `description` is missing. Desipte both distribution have similar shape, they are centered in smiliar location. Using difference in mean may not effectively capture this difference in distribution. So we decide to use Kolmogorov-Smirnov (K-S) statistic as our test statistics for the permutation test.
+Based on the plot above, the orange line illustrates the distribution of minutes when `description` is not missing, while the blue line illustrates the distribution of minutes when `description` is missing. Despite both distributions having similar shapes, they are centered in a similar location. Using the difference in mean may not effectively capture this difference in distribution. So we decide to use the Kolmogorov-Smirnov (K-S) statistic as our test statistics for the permutation test.
 
 
 
-We shuffle the missingness of description 1000 times and get 1000 simulated K-S test statistics of `minutes` column during the permutation test. The permutation result is shown as below. 
+We shuffle the missingness of the `description` 1000 times and get 1000 simulated K-S test statistics of the `minutes` column during the permutation test. The permutation result is shown below. 
 
 <iframe src="figures/miss_perm_2.html" width=800 height=600 frameBorder=0></iframe>
 
-From the plot above and result of the permutation test, the 0.05% significance level of the simulated statistics is 0.15 and our observed test statistics 0.1, which is smaller that the values of the significance level. The p-value is 0.408, which is greater than the significance level of 0.05. So we **fail to reject the null hypothesis.**
+From the plot above and the result of the permutation test, the 0.05% significance level of the simulated statistics is 0.15 and our observed test statistics is 0.1, which is smaller than the values of the significance level. The p-value is 0.408, which is greater than the significance level of 0.05. So we **fail to reject the null hypothesis.**
 
-Thus, we conclude that **the missingness of `descrpition` likely depends on the `minutes` column.**
+Thus, we conclude that **the missingness of `description` likely depends on the `minutes` column.**
 
 ---
 
 ## Hypothesis Testing
 
-The question we are going to explore and reasearch in this section is the following: **Do popular recipes (those with high review count) have a lower sugar level compared to less popular ones (those with low review count)** 
+The question we are going to explore and research in this section is the following: **Do popular recipes (those with high review count) have a lower sugar level compared to less popular ones (those with low review count)** 
 
-Recall that we define high review count threshold as having more than **10** reviews. We will conduct a permutationt test to see if the distribution of sugar level for popular recipes and the distribution of sugar level for not popular recipes are similar. 
+Recall that we define a high review count threshold as having more than **10** reviews. We will conduct a permutation test to see if the distribution of sugar levels for popular recipes and the distribution of sugar levels for non-popular recipes are similar. 
 
 <br>
 
 Set up:
 
-**Null Hypothesis**: Receipes with a high review count do not have a lower sugar levels than those with low review count. Any observed differences in our samples are merely due to random chance.
+**Null Hypothesis**: Recipes with a high review count do not have a lower sugar level than those with a low review count. Any observed differences in our samples are merely due to random chance.
 
-**Alternative Hypothesis**: Recipes with high review count indeed have a lower sugar level than those with a low review count. The observed difference observed in our samples cannot be explained by random chance alone.
+**Alternative Hypothesis**: Recipes with a high review count indeed have a lower sugar level than those with a low review count. The observed difference observed in our samples cannot be explained by random chance alone.
 
-**Test Statistics**: Since our variable of interest is numerical and our test is one-tail test, signifying a directional alternative hypothesis, we will use difference in mean as our test statistics for the permutation test.
+**Test Statistics**: Since our variable of interest is numerical and our test is a one-tail test, a directional alternative hypothesis, we will use the difference in mean as our test statistics for the permutation test.
 
 **Significance Level**: 0.05
 
 <br>
 
-We created a new column called `is_popular` which is true if the recipe has reivew count more than 10, and false otherwise. 
+We created a new column called `is_popular` which is true if the recipe has a review count of more than 10, and false otherwise. 
 
-This is a sample of the dataframe that we are going to perform permutation test on. 
+This is a sample of the dataframe that we are going to perform the permutation test on. 
 
 |       |   sugar  | is_popular  |
 |------ |-------- |------------- |
@@ -299,21 +299,21 @@ This is a sample of the dataframe that we are going to perform permutation test 
 
 <br>
 
-We shuffle the `is_popular` 1000 times and get 1000 simulated difference in mean test statistics of `sugar` column during the permutation test. The emperical distribution of permutation test result is shown as below. 
+We shuffle the `is_popular` 1000 times and get 1000 simulated differences in mean test statistics of the `sugar` column during the permutation test. The empirical distribution of the permutation test results is shown below. 
 
 <iframe src="figures/hyp.html" width=800 height=600 frameBorder=0></iframe>
 
 **P-value**: 0.0
 
-From looking at the graph above, we can see that our observed difference in mean, which is 14.58, is greater than the significance level of simulated difference in mean, which is 6.05, suggesting that the observed statistics in our sample are not merely coincidental. Furthermore, the p-value obtained from our permutation testing is 0.0, which falls below our significance level of 0.05. Therefore, we **reject our null hypothesis** and in favor of our alternative hypothesis: recipes with high review counts likely have a lower sugar level compared to those with low review counts.
+From looking at the graph above, we can see that our observed difference in mean, which is 14.58, is greater than the significance level of the simulated difference in mean, which is 6.05, suggesting that the observed statistics in our sample are not merely coincidental. Furthermore, the p-value obtained from our permutation testing is 0.0, which falls below our significance level of 0.05. Therefore, we **reject our null hypothesis**, in favor of our alternative hypothesis: recipes with high review counts likely have a lower sugar level compared to those with low review counts.
 
-The result can be reasonable that people might like to give high rating to recipes with lower sugar content in food, and food with a lower sugar level is considered more healthy. 
+The result can be reasonable that people might like to give high ratings to recipes with lower sugar content in food, and food with a lower sugar level is considered more healthy. 
 
 ---
 
 ## Framing a Prediction Problem
 
-Recall from the introduction that we are interesting in the following problem:
+Recall from the introduction that we are interested in the following problem:
 
 **What category does a recipe fall into based on its predicted popularity level and average rating score?**
 
@@ -367,7 +367,7 @@ The key metrics we will be using for evaluating our classifier model performance
 
 ## Baseline Model: A Simple Approach
 
-We split our data to training and testing set by stratifing using the class label. The training set consititue 80% of our data while the testing has the reamining 20% of our data. We will use testing set to evalute the ability of our model to generalize to unseen data.:
+We split our data into training and testing sets by stratifying using the class label. The training set constitutes 80% of our data while the testing has the remaining 20% of our data. We will use the testing set to evaluate the ability of our model to generalize to unseen data.:
 
     X_train, X_test, y_train, y_test = train_test_split(recipe.drop(['class', 'rating', 'n_review'], axis=1), 
                                                         recipe['class'], test_size=0.2, stratify=recipe['class'])
@@ -376,22 +376,22 @@ We split our data to training and testing set by stratifing using the class labe
 
 ### Feature Engineering
 
-We perform the following feature engineering steps to transform our vairables before fitting into our model. We use RobustScaler instead of StandardScaler on most numerical column because there exist extreme values in those columns. RobustScaler use the median instead of the mean while scaling the data. 
+We perform the following feature engineering steps to transform our variables before fitting them into our model. We use RobustScaler instead of StandardScaler on most numerical columns because there exist extreme values in those columns. RobustScaler uses the median instead of the mean while scaling the data. 
 
 <br>
 
 **Quantative Feature**:
 
 `minutes`, `protein`, `sodium`, `saturated_fat`, `total_fat`, `carbohydrates`
-- Type: quantative continuous
+- Type: quantitative continuous
 - Feature Transformation: use RobustScaler to reduce the impact of outlier
 
 `n_steps`, `n_ingredients`
-- Type: quantative discrete
+- Type: quantitative discrete
 - Feature Transformation: passthrough
 
 `time`
-- Type: quantative
+- Type: quantitative
 - Feature Transformation: extract year, month, and day from `submitted` timestamp column
 
 <br>
@@ -399,26 +399,26 @@ We perform the following feature engineering steps to transform our vairables be
 **Categorical Feature**:
 
 `calories`, `sugar`
-- Type: quantative to nominal
-- Feature Transformation: cateogrize calories and sugar into 8 bins and do one-hot encoding
+- Type: quantitative to nominal
+- Feature Transformation: categorize calories and sugar into 8 bins and do one-hot encoding
 
 `recipe_complexity`
 - Type: nominal
 - Feature Transformation: binarize `n_steps` and `n_ingredients` using the threshold of 10 to represent recipe complexity
 
-We choose to build features from the above columns as we believe these features might have some relationship for predicting recipe's popularity and average rating. 
+We choose to build features from the above columns as we believe these features might have some relationship for predicting the recipe's popularity and average rating. 
 
 ---
 
 ### Baseline Model Building and Performance Evaluation
 
-For Baseline Model, we decide to use the Random Forest model for our classification problem. 
+For the Baseline Model, we decide to use the Random Forest model for our classification problem. 
 
-The main idea of Random Forest algorithm is to Fit *n* number of decision trees by using bagging and a random subset of features at each split. Predict by taking a vote from those *n* decision trees. It is the idea of Ensemble Learning.
+The main idea of the Random Forest algorithm is to Fit *n* number of decision trees by using bagging and a random subset of features at each split. Predict by taking a vote from those *n* decision trees. It is the idea of Ensemble Learning.
 
 <br>
 
-Here is a pipeline of our baseline model, in which we transform our column first, then fit into RandomForestClassifier. 
+Here is a pipeline of our baseline model, in which we transform our column first, and then fit into RandomForestClassifier. 
 
     Pipeline(steps=[('col_trans',
                      ColumnTransformer(transformers=[('outlier', RobustScaler(),
@@ -447,14 +447,14 @@ Here is a pipeline of our baseline model, in which we transform our column first
 
 <br>
 
-After fitting our training data into the baseline model, we evalute our model using testing data. The confusion matrix below is the result of the prediction of testing data. 
+After fitting our training data into the baseline model, we evaluate our model using testing data. The confusion matrix below is the result of the prediction of testing data. 
 
 <iframe src="figures/base_confus.html" width=800 height=600 frameBorder=0></iframe>
 
 
-By looking at the confusion matrix, we can see that the baseline model misclassifies lots of recipe into class lable 1 and 2. In addition, it have difficult in accurately classifying recipes into class label 3 and 4, which correspond to high review counts. This is caused by the imbalanced nature of class label in our dataset. **Recipes with high review counts are relatively rare and constitute a minority group of data**, whereas recipes with low review count are more prevalent and make up a majority of the data. This is something we will address in building our final model. 
+By looking at the confusion matrix, we can see that the baseline model misclassifies lots of recipes into class labels 1 and 2. In addition, it is difficult to accurately classify recipes into class labels 3 and 4, which correspond to high review counts. This is caused by the imbalanced nature of class labels in our dataset. **Recipes with high review counts are relatively rare and constitute a minority group of data**, whereas recipes with low review counts are more prevalent and make up a majority of the data. This is something we will address in building our final model. 
 
-Result of counting all the class lable in our dataset, showing imbalanced data:
+The result of counting all the class labels in our dataset, showing imbalanced data:
 
     2    48979
     1    28825
@@ -477,28 +477,28 @@ Let's look at the precision, recall, and f1-score of our baseline model for pred
 |macro avg   |   0.26    |  0.26  |   0.23   | 16235   |
 |weighted avg|   0.52    |  0.59  |   0.51   | 16235   |
 
-We see that the model has 0 precision, recall, and f1-score for class label 3 and 4 while it has a high f1-score for class label 2 since most recipes belongs to class 2. Our model accuracy is 59%. Overall, the performane of our baseline model is not as good as we thought so since it has difficult in identifying popular recipes, which are something we are more interested in. We will improve our baseline model to correctly classify more popular recipes. 
+We see that the model has 0 precision, recall, and f1-score for class labels 3 and 4 while it has a high f1-score for class label 2 since most recipes belong to class 2. Our model accuracy is 59%. Overall, the performance of our baseline model is not as good as we thought since it is difficult to identify popular recipes, which are something we are more interested in. We will improve our baseline model to correctly classify more popular recipes. 
 
 ---
 
 ## Final Model: Balanced Random Forest & Binary Classification
 
-As usual, we will us the same training and testing data from baseline mode. 
+As usual, we will use the same training and testing data from baseline mode. 
 
 #### Feature Engineering
 
 **The following features are from the baseline model**
 
 `minutes`, `protein`, `sodium`, `saturated_fat`, `total_fat`, `carbohydrates`
-- Type: quantative continuous
+- Type: quantitative continuous
 - Feature Transformation: use RobustScaler to reduce the impact of outlier
 
 `n_steps`, `n_ingredients`
-- Type: quantative discrete
+- Type: quantitative discrete
 - Feature Transformation: passthrough
 
 `time`
-- Type: quantative
+- Type: quantitative
 - Feature Transformation: extract year, month, and day from `submitted` timestamp column
 
 `recipe_complexity`
@@ -513,29 +513,29 @@ As usual, we will us the same training and testing data from baseline mode.
 - Type: text data
 - Feature Transformation: 
  - Build a list of vocabulary from high Inverse Document Frequency(IDF) words from the `description` of **high reivew count recipes** (minority class label, class 3 and 4)
- - Vectorize the description text column using TF-IDF and the vocabulary from previous step
+ - Vectorize the description text column using TF-IDF and the vocabulary from the previous step
  - For each recipe, extract the top 5 highest TF-IDF values as the features
 
 `steps`
 - Type: text data
 - Feature Transformation: 
  - Build a list of vocabulary from high Inverse Document Frequency(IDF) words from the `steps` of **high reivew count recipes** (minority class label, class 3 and 4)
- - Vectorize the steps text column using TF-IDF and the vocabulary from previous step
+ - Vectorize the steps text column using TF-IDF and the vocabulary from the previous step
  - For each recipe, extract the top 5 highest TF-IDF values as the features 
 
-We believe that incorporating `description` and `steps` feature can improve our model's ability to identify recipes with high review counts since we built a vocabulary from those recipes and use TF-IDF to extract important text information. While there is a potential risk of data leakage since we use the class label to build feature, our approach to using the class label is indirect and we only use the training data to build vocabulary. We believe it is appropraite to use these text feature in our final model. 
+We believe that incorporating the `description` and `steps` features can improve our model's ability to identify recipes with high review counts since we built a vocabulary from those recipes and used TF-IDF to extract important text information. 
 
 <br>
 
-Simple sentiment analysis on `reviews` column:
+Simple sentiment analysis on the `reviews` column:
 
 `reviews`
 - Type: text data
 - Feature Transformation:
- - Manaually create a list of sentiment words such as `good`, `loved`, `hated`, etc that are relevant for extracting sentiment information
- - For each word in sentiment word list, binarize `reviews` based on whether there are enough review comments that contain that particular word
+ - Manually create a list of sentiment words such as `good`, `loved`, `hated`, etc that are relevant for extracting sentiment information
+ - For each word in the sentiment word list, binarize `reviews` based on whether there are enough review comments that contain that particular word
  
-We think that adding this sentiment analysis on `reviews` feature can as well improve our model's ability to distinguish recipes between high average rating and low average rating by the simple logic that high rating recipes often have more positive words while low rating recipe often have more negative words. 
+We think that adding this sentiment analysis to the `reviews` feature can improve our model's ability to distinguish recipes between high average ratings and low average ratings because high-rating recipes often have more positive words while low-rating recipes often have more negative words. 
 
 ---
 
@@ -594,23 +594,23 @@ Model pipeline:
                                                                               max_depth=19,
                                                                               n_estimators=150)))])
 
-We use standard random forest to classify recipes based on average rating and use balanced random forest to classify recipes based on review counts, since it has more imbalanced data. 
+We use the standard random forest to classify recipes based on average ratings and use a balanced random forest to classify recipes based on review counts since it has more imbalanced class labels. 
 
 ---
 
 ### Hyperparameter Tunning
 
-We manually iterative through a list of hyperparameter with stratified 5-fold trian-test split seperately for our two classifier models to find the best hyperparameter for model accuracy. We found the best `max_depth` hyperparameter to be 16 and 19 and the best `num_estimators` hyperparameter to be 180 and 150 for balanced ranfom forest and standard random forest, respectively, as seen in our pipeline above. 
+We manually iterate through a list of hyperparameters with stratified 5-fold train-test split separately for our two classifier models to find the best hyperparameter for model accuracy. We found the best `max_depth` hyperparameter to be 16 and 19 and the best `num_estimators` hyperparameter to be 180 and 150 for balanced random forest and standard random forest, respectively, as seen in our pipeline above. 
 
 ---
 
 ### Model Performance Evaluation
 
-After fitting our training data into the final model, we evalute our model using testing data. The confusion matrix below is the result of the prediction of testing data. 
+After fitting our training data into the final model, we evaluate our model using testing data. The confusion matrix below is the result of the prediction of testing data. 
 
 <iframe src="figures/final_confus.html" width=800 height=600 frameBorder=0></iframe>
 
-As seen in the confusion matrix, our final model has correctly classified a considerable amount of minority class label, class 3 and 4, which is overall an improvement to the baseline model. 
+As seen in the confusion matrix, our final model has correctly classified a considerable amount of minority class labels, class 3 and 4, which is overall an improvement to the baseline model. 
 
 <br>
 
@@ -627,13 +627,13 @@ Let's look at the precision, recall, and f1-score of our final model for predict
 |weighted avg|   0.66    |  0.63  |   0.64   | 16235   |
 
 
-Although the precision for class 3 and 4 are relatively low, their recall are high, which means that **our model is good at capturing all the high reiview count recipes, without missing too many of them, but at the same time, it makes too many false positive, misclassify low review count recipes into high review count categories.** The trade off is acceptaible. The accuracy of our final model is 63%, which is better than our baseline model. Overall, our final model is an improvement over the baseline model. 
+Although the precision for classes 3 and 4 is relatively low, their recall is high, which means that **our model is good at capturing all the high review count recipes, without missing too many of them, but at the same time, it makes too many false positive, misclassify low review count recipes into high review count categories.** The trade-off is acceptable. The accuracy of our final model is 63%, which is better than our baseline model. Overall, our final model is an improvement over the baseline model. 
 
 <br>
 
 <iframe src="figures/final_feature.html" width=800 height=600 frameBorder=0></iframe>
 
-We can gain insights into our model's feature importance by visualization. Feature importance highlights the extent to which our engineered feature contributes to help the model's classification decision. A higher importance score indicates that the feature plays a more significant role in classifying recipes. We can see from the plot that certain features have a very high importance to the model. Specifically, the `review` feature corresponds to features numbered from 21-50. Recall that we use a list of manually created sentiment words for simple sentiment analysis. The result of the visualization above indicates that certain sentiment words are particularly useful in helping the model to make accurate predictions. 
+We can gain insights into our model's feature importance by visualization. Feature importance highlights the extent to which our engineered feature contributes to helping the model's classification decision. A higher importance score indicates that the feature plays a more significant role in classifying recipes. We can see from the plot that certain features have a very high importance to the model. Specifically, the `review` feature corresponds to features numbered from 21-50. Recall that we use a list of manually created sentiment words for simple sentiment analysis. The result of the visualization above indicates that certain sentiment words are particularly useful in helping the model to make accurate predictions. 
 
 Below, we present the top 10 most useful sentiment words for feature engineering in our classification model:
 
@@ -650,7 +650,7 @@ Below, we present the top 10 most useful sentiment words for feature engineering
 
 --- 
 
-Finally, we fit our final model using all availbale data and ship to production for fairness analysis. 
+Finally, we fit our final model using all available data for fairness analysis. 
 
     final_model = pl_clf.fit(
         recipe.drop(['class', 'rating', 'n_review'], axis=1),
@@ -660,9 +660,9 @@ Finally, we fit our final model using all availbale data and ship to production 
 
 ## Fairness Analysis
 
-For fairness analysis, we are interested in this question: **“Are recipes with `vegetarian` tags more likely to be correctly classified as to the high average rating category by the model, compared to those without the `vegetarian` tags?”** Are our model fair in terms of precision?
+For fairness analysis, we are interested in this question: **“Are recipes with `vegetarian` tags more likely to be correctly classified as to the high average rating category by the model, compared to those without the `vegetarian` tags?”** Are our models fair in terms of precision?
 
-To evaluate fairness, we will compare the **precision** acorss two distinct groups. Specifically, we will compare the precision score for recipes with the 'vegetarian' tag against those without it. If the precision for recipes with the `vegetarian` tag is statistically significantly higher than the precision for recipes without it, it could potentially indicate a bias towards classifying `vegetarian` recipes as high average rating more frequently, even when they should not be classified as such. In our dataset, a high average rating corresponds to class categories 2 and 4. 
+To evaluate fairness, we will compare the **precision** across two distinct groups. Specifically, we will compare the precision score for recipes with the 'vegetarian' tag against those without it. If the precision for recipes with the `vegetarian` tag is statistically significantly higher than the precision for recipes without it, it could potentially indicate a bias towards classifying `vegetarian` recipes as having a high average rating more frequently, even when they should not be classified as such. In our dataset, a high average rating corresponds to class categories 2 and 4. 
 
 <br>
 
@@ -672,9 +672,9 @@ Setup:
 
 **Group 2**: Recipes without the `vegetarian` tag
 
-**Null Hypothesis**: Our model is fair. Our classifier's precision is the same for recipes with and without `vegetarian` tag, and any differences are due to random chance.
+**Null Hypothesis**: Our model is fair. Our classifier's precision is the same for recipes with and without the `vegetarian` tag, and any differences are due to random chance.
 
-**Alternative Hypothesis**: Our model is not fair. Our classifier's precision is higher for recipes with `vegetarian` tag than those without, and any observed differences can not be explained by random chance alone.
+**Alternative Hypothesis**: Our model is not fair. Our classifier's precision is higher for recipes with the `vegetarian` tag than those without, and any observed differences can not be explained by random chance alone.
 
 **Test statistic**: Difference in average precision of class 2 and 4 (without `vegetarian` tag - with `vegetarian` tag).
 
@@ -682,13 +682,13 @@ Setup:
 
 <br>
 
-We fitted our final model with all available and created a new column `has_tags_vegetarian` that indicates if the recipes has `vegetarian` tag. 
+We fitted our final model with all available data and created a new column `has_tags_vegetarian` that indicates if the recipes have the `vegetarian` tag. 
 
-We then shuffle the `has_tags_vegetarian` 1000 times and get 1000 simulated difference in average precision test statistics for recipes with and without `vegetarian` tag during the permutation test. The emperical distribution of permutation test result is shown as below. 
+We then shuffle the `has_tags_vegetarian` 1000 times and get 1000 simulated differences in average precision test statistics for recipes with and without the `vegetarian` tag during the permutation test. The empirical distribution of permutation test results is shown below. 
 
 <iframe src="figures/fair.html" width=800 height=600 frameBorder=0></iframe>
 
-From the graph above, we can see that the observed difference in precision falls below the significance level of 0.05, suggesting that the observed statistics in our sample are likely by random chance alone. The p-value we obtained from performing our permutation testing is approximately 0.403, which is greater than our significance level of 0.05. Therefore, we **fail to feject our null hypothesis** that the precision of our classifier is likely around the same for recipes with and without `vegetarian` tag, and any observed differences are due to random chance. Our model **achieves precision parity** across groups with and without `vegetarian`tag. 
+From the graph above, we can see that the observed difference in precision falls below the significance level of 0.05, suggesting that the observed statistics in our sample are likely by random chance alone. The p-value we obtained from performing our permutation testing is approximately 0.403, which is greater than our significance level of 0.05. Therefore, we **fail to reject our null hypothesis** that the precision of our classifier is likely around the same for recipes with and without the `vegetarian` tag, and any observed differences are due to random chance. Our model **achieves precision parity** across groups with and without the `vegetarian` tag. 
 
 [Back to the Top](#table-of-contents)
 
